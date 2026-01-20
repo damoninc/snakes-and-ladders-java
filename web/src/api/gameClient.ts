@@ -15,7 +15,7 @@ export type GameState = {
   winnerName: string | null
 }
 
-const API_BASE = '/api/game'
+const API_BASE = import.meta.env.VITE_BASE_API_URL || "";
 
 const readErrorMessage = async (response: Response) => {
   try {
