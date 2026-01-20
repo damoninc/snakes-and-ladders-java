@@ -7,6 +7,7 @@ public class Player {
 
     public Player(String name, Integer playerId) {
         this.name = name;
+        this.playerId = playerId;
         this.position = 0;
     }
 
