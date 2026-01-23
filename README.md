@@ -1,3 +1,5 @@
+## AWS Architecture Diagram
+
 ```mermaid
 flowchart TB
   %% =========================
@@ -8,15 +10,15 @@ flowchart TB
   %% =========================
   %% DNS
   %% =========================
-  R53["Route 53 DNS\nHosted Zone: damonincorvaia.com"]:::dns
+  R53["Route 53 DNS Hosted Zone: damonincorvaia.com"]:::dns
 
   %% =========================
   %% Frontend (Amplify)
   %% =========================
   subgraph FE["Frontend: AWS Amplify Hosting"]
-    A["Amplify Hosting\n(Build + Deploy from GitHub)"]:::frontend
-    CF["CDN (CloudFront behind Amplify)\nHTTPS by default"]:::cdn
-    S["Static SPA Assets\nHTML/CSS/JS"]:::frontend
+    A["Amplify Hosting (Build + Deploy from GitHub)"]:::frontend
+    CF["CDN (CloudFront behind Amplify) HTTPS by default"]:::cdn
+    S["Static SPA Assets HTML/CSS/JS"]:::frontend
     A --> CF --> S
   end
 
@@ -24,13 +26,13 @@ flowchart TB
   %% Backend (Beanstalk + ALB)
   %% =========================
   subgraph BE["Backend: Elastic Beanstalk (Java API)"]
-    ALB["Application Load Balancer\nListener: 443 HTTPS"]:::alb
-    ACM["ACM Certificate\napi.games.damonincorvaia.com"]:::acm
-    TG["Target Group\nHealth Checks"]:::alb
+    ALB["Application Load Balancer Listener: 443 HTTPS"]:::alb
+    ACM["ACM Certificate api.games.damonincorvaia.com"]:::acm
+    TG["Target Group Health Checks"]:::alb
     subgraph VPC["VPC"]
       subgraph ASG["Auto Scaling Group (min 1)"]
         EC2["EC2 Instance(s)"]:::compute
-        APP["Java API (JAR)\n/api/... endpoints"]:::compute
+        APP["Java API (JAR) /api/... endpoints"]:::compute
         EC2 --> APP
       end
     end
@@ -47,23 +49,24 @@ flowchart TB
   %% =========================
   %% User flows
   %% =========================
-  U -->|1) Load site| R53
-  U -->|2) HTTPS GET games.damonincorvaia.com| CF
-  U -->|3) SPA runs in browser| S
-
-  U -->|"4) API calls (VITE_API_BASE_URL) https://api.games.../api/..."| R53
-  U -->|5) HTTPS to ALB :443| ALB
-  ALB -->|6) Forward to healthy target| TG
-  TG -->|7) Request handled by Java API| APP
+  U -->|1: Load site| R53
+  U -->|2: HTTPS GET games.damonincorvaia.com| CF
+  U -->|3: SPA runs in browser| S
 
   %% =========================
   %% Styles
   %% =========================
-  classDef client fill:#f7f7f7,stroke:#333,stroke-width:1px;
-  classDef dns fill:#fff4cc,stroke:#8a6d3b,stroke-width:1px;
-  classDef frontend fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px;
-  classDef cdn fill:#e3f2fd,stroke:#1565c0,stroke-width:1px;
-  classDef alb fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1px;
-  classDef acm fill:#fdecea,stroke:#b71c1c,stroke-width:1px;
-  classDef compute fill:#fff,stroke:#555,stroke-width:1px;
+  classDef client  fill:#F8FAFC,stroke:#334155,stroke-width:1px,color:#0F172A;
+  classDef dns     fill:#FEF3C7,stroke:#D97706,stroke-width:1px,color:#92400E;
+  classDef frontend fill:#DCFCE7,stroke:#16A34A,stroke-width:1px,color:#14532D;
+  classDef cdn     fill:#DBEAFE,stroke:#2563EB,stroke-width:1px,color:#1E3A8A;
+  classDef alb     fill:#EDE9FE,stroke:#7C3AED,stroke-width:1px,color:#4C1D95;
+  classDef acm     fill:#FFE4E6,stroke:#E11D48,stroke-width:1px,color:#9F1239;
+  classDef compute fill:#F1F5F9,stroke:#475569,stroke-width:1px,color:#0F172A;
+
+  %% Optional: tint the big containers slightly (works in most Mermaid renderers)
+  style FE fill:#F0FDF4,stroke:#16A34A,stroke-width:1px
+  style BE fill:#FAF5FF,stroke:#7C3AED,stroke-width:1px
+  style VPC fill:#F8FAFC,stroke:#64748B,stroke-width:1px
+  style ASG fill:#F8FAFC,stroke:#64748B,stroke-width:1px
 ```
