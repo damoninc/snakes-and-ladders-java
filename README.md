@@ -1,3 +1,18 @@
+## How to install / setup
+
+# Starting backend server
+1. Clone the repository
+2. Run `cd game` to navigate to the game directory
+3. Run `mvn clean install` to build the project
+4. Run `mvn spring-boot:run` to start the application
+
+# Starting frontend server
+1. Clone the repository
+2. Run `cd web` to navigate to the frontend directory
+3. Run `npm install` to install the dependencies
+4. Run `npm run dev` to start the application
+
+
 ## AWS Architecture Diagram
 
 ```mermaid
